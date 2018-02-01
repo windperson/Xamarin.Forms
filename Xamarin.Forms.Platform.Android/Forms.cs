@@ -51,15 +51,15 @@ namespace Xamarin.Forms
 
 		// Provide backwards compat for Forms.Init and AndroidActivity
 		// Why is bundle a param if never used?
-		public static void Init(Context activity, Bundle bundle)
+		public static void Init(Context activity, Bundle bundle, AssemblyRegistrationConfig regConfig = null)
 		{
 			Assembly resourceAssembly = Assembly.GetCallingAssembly();
-			SetupInit(activity, resourceAssembly);
+			Init(activity, bundle, resourceAssembly, regConfig);
 		}
 
-		public static void Init(Context activity, Bundle bundle, Assembly resourceAssembly)
+		public static void Init(Context activity, Bundle bundle, Assembly resourceAssembly, AssemblyRegistrationConfig regConfig = null)
 		{
-			SetupInit(activity, resourceAssembly);
+			SetupInit(activity, resourceAssembly, regConfig);
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace Xamarin.Forms
 				viewInitialized(self, new ViewInitializedEventArgs { View = self, NativeView = nativeView });
 		}
 
-		static void SetupInit(Context activity, Assembly resourceAssembly)
+		static void SetupInit(Context activity, Assembly resourceAssembly, AssemblyRegistrationConfig regConfig = null)
 		{
 			if (!IsInitialized)
 			{
@@ -160,7 +160,12 @@ namespace Xamarin.Forms
 			if (!IsInitialized)
 			{
 				// Only need to do this once
-				Registrar.RegisterAll(new[] { typeof(ExportRendererAttribute), typeof(ExportCellAttribute), typeof(ExportImageSourceHandlerAttribute) });
+				Registrar.RegisterAll(new[]
+				{
+					typeof(ExportRendererAttribute), 
+					typeof(ExportCellAttribute), 
+					typeof(ExportImageSourceHandlerAttribute)
+				}, regConfig);
 			}
 
 			// This could change as a result of a config change, so we need to check it every time

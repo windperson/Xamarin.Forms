@@ -173,11 +173,16 @@ namespace Xamarin.Forms.Internals
 
 		public static Registrar<IRegisterable> Registered { get; }
 
-		public static void RegisterAll(Type[] attrTypes)
+		public static void RegisterAll(Type[] attrTypes, AssemblyRegistrationConfig regConfig = null)
 		{
 			Assembly[] assemblies = Device.GetAssemblies();
 			if (ExtraAssemblies != null)
 				assemblies = assemblies.Union(ExtraAssemblies).ToArray();
+
+			if (regConfig != null)
+			{
+				assemblies = assemblies.Where(regConfig.AllowsAssembly).ToArray();
+			}
 
 			Assembly defaultRendererAssembly = Device.PlatformServices.GetType().GetTypeInfo().Assembly;
 			int indexOfExecuting = Array.IndexOf(assemblies, defaultRendererAssembly);
