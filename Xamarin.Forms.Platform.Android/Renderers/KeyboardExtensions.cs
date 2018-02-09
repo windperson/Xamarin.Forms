@@ -31,9 +31,12 @@ namespace Xamarin.Forms.Platform.Android
 			else if (self is CustomKeyboard)
 			{
 				var custom = (CustomKeyboard)self;
-				bool capitalizedSentenceEnabled = (custom.Flags & KeyboardFlags.CapitalizeSentence) == KeyboardFlags.CapitalizeSentence;
-				bool spellcheckEnabled = (custom.Flags & KeyboardFlags.Spellcheck) == KeyboardFlags.Spellcheck;
-				bool suggestionsEnabled = (custom.Flags & KeyboardFlags.Suggestions) == KeyboardFlags.Suggestions;
+				bool capitalizedSentenceEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeSentence);
+				bool capitalizedWordsEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeWord);
+				bool capitalizedCharacterEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeCharacter);				
+
+				bool spellcheckEnabled = custom.Flags.HasFlag(KeyboardFlags.Spellcheck);
+				bool suggestionsEnabled = custom.Flags.HasFlag(KeyboardFlags.Suggestions);
 
 				if (!capitalizedSentenceEnabled && !spellcheckEnabled && !suggestionsEnabled)
 					result = InputTypes.ClassText | InputTypes.TextFlagNoSuggestions;
@@ -66,6 +69,17 @@ namespace Xamarin.Forms.Platform.Android
 
 				if (capitalizedSentenceEnabled && spellcheckEnabled && suggestionsEnabled)
 					result = InputTypes.ClassText | InputTypes.TextFlagCapSentences | InputTypes.TextFlagAutoCorrect;
+
+				// All existed before these settings. This ensures these changes are backwards compatible
+				// without this check TextFlagCapCharacters would win
+				if (custom.Flags != KeyboardFlags.All)
+				{
+					if (capitalizedWordsEnabled)
+						result = result | InputTypes.TextFlagCapWords;
+
+					if (capitalizedCharacterEnabled)
+						result = result | InputTypes.TextFlagCapCharacters;
+				}
 			}
 			else
 			{

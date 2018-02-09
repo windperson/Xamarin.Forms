@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using Windows.UI.Xaml.Input;
+using Xamarin.Forms.Internals;
 
 namespace Xamarin.Forms.Platform.UWP
 {
@@ -42,8 +44,39 @@ namespace Xamarin.Forms.Platform.UWP
 			}
 			else
 			{
-				name.NameValue = InputScopeNameValue.Default;
+				var custom = (CustomKeyboard)self;
+				bool capitalizedSentenceEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeSentence);
+				bool capitalizedWordsEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeWord);
+				bool capitalizedCharacterEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeCharacter);
+				bool spellcheckEnabled = custom.Flags.HasFlag(KeyboardFlags.Spellcheck);
+				bool suggestionsEnabled = custom.Flags.HasFlag(KeyboardFlags.Suggestions);
+				InputScopeNameValue nameValue = InputScopeNameValue.Default;
+				
+				if(capitalizedSentenceEnabled)
+				{
+					if (!spellcheckEnabled)
+					{
+						Log.Warning(null, "CapitalizeSentence only works when spell check is enabled");
+					}
+				}
+				else if(capitalizedWordsEnabled)
+				{
+					if (!spellcheckEnabled)
+					{
+						Log.Warning(null, "CapitalizeWord only works when spell check is enabled");
+					}
+
+					nameValue = InputScopeNameValue.NameOrPhoneNumber;
+				}
+
+				if (capitalizedCharacterEnabled)
+				{
+					Log.Warning(null, "UWP doesn't support CapitalizeCharacter");
+				}
+
+				name.NameValue = nameValue;
 			}
+
 			result.Names.Add(name);
 			return result;
 		}
