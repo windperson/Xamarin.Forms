@@ -673,19 +673,19 @@ namespace Xamarin.Forms.ControlGallery.iOS
 				}
 			}
 
-			if (flags.Value.HasFlag(KeyboardFlags.CapitalizeCharacter))
+			else if (flags.Value.HasFlag(KeyboardFlags.CapitalizeCharacter))
 			{
 				if (currentValue != UITextAutocapitalizationType.AllCharacters)
 				{
-					throw new Exception("TextFlagCapSentences not correctly set");
+                    throw new Exception("CapitalizeCharacter not correctly set");
 				}
 			}
-			if (flags.Value.HasFlag(KeyboardFlags.CapitalizeWord))
+			else if (flags.Value.HasFlag(KeyboardFlags.CapitalizeWord))
 			{
 
 				if (currentValue != UITextAutocapitalizationType.Words)
 				{
-					throw new Exception("TextFlagCapSentences not correctly set");
+                    throw new Exception("CapitalizeWord not correctly set");
 				}
 			}
 		}
