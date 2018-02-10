@@ -10,6 +10,7 @@ using Xamarin.Forms.Platform.UWP;
 
 [assembly: ExportRenderer(typeof(Xamarin.Forms.Controls.Bugzilla42602.TextBoxView), typeof(Xamarin.Forms.ControlGallery.WindowsUniversal.TextBoxViewRenderer))]
 [assembly: ExportRenderer(typeof(Issue1683.EntryKeyboardFlags), typeof(EntryRendererKeyboardFlags))]
+[assembly: ExportRenderer(typeof(Issue1683.EditorKeyboardFlags), typeof(EditorRendererKeyboardFlags))]
 namespace Xamarin.Forms.ControlGallery.WindowsUniversal
 {
 	public class EntryRendererKeyboardFlags : EntryRenderer
@@ -39,6 +40,7 @@ namespace Xamarin.Forms.ControlGallery.WindowsUniversal
 	{
 		public static void TestKeyboardFlags(this FormsTextBox Control, KeyboardFlags? flags)
 		{
+			if (flags == null) { return; }
 			if (flags.Value.HasFlag(KeyboardFlags.CapitalizeSentence))
 			{
 				if (!Control.IsSpellCheckEnabled)
@@ -67,6 +69,7 @@ namespace Xamarin.Forms.ControlGallery.WindowsUniversal
 
 		public static void SetKeyboardFlags(this FormsTextBox Control, KeyboardFlags? flags)
 		{
+			if (flags == null) { return; }
 			var result = new InputScope();
 			var value = InputScopeNameValue.Default;
 
