@@ -30,6 +30,8 @@ using Xamarin.Forms.Controls.Issues;
 
 [assembly: ExportRenderer(typeof(Bugzilla42000._42000NumericEntryNoDecimal), typeof(EntryRendererNoDecimal))]
 [assembly: ExportRenderer(typeof(Bugzilla42000._42000NumericEntryNoNegative), typeof(EntryRendererNoNegative))]
+[assembly: ExportRenderer(typeof(Issue1683.EntryKeyboardFlags), typeof(EntryRendererKeyboardFlags))]
+[assembly: ExportRenderer(typeof(Issue1683.EditorKeyboardFlags), typeof(EditorRendererKeyboardFlags))]
 //[assembly: ExportRenderer(typeof(AndroidHelpText.HintLabel), typeof(HintLabel))]
 [assembly: ExportRenderer(typeof(QuickCollectNavigationPage), typeof(QuickCollectNavigationPageRenderer))]
 
@@ -122,7 +124,7 @@ namespace Xamarin.Forms.ControlGallery.Android
 
 	public class NativeListViewRenderer : ViewRenderer<NativeListView, global::Android.Widget.ListView>
 	{
-#pragma warning disable 618 
+#pragma warning disable 618
 		public NativeListViewRenderer()
 #pragma warning restore 618
 		{
@@ -564,6 +566,95 @@ namespace Xamarin.Forms.ControlGallery.Android
 	}
 
 
+
+#pragma warning disable 618
+	public class EntryRendererKeyboardFlags : EntryRenderer
+#pragma warning restore 618
+	{
+
+		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			var FlagsToSet = ((Issue1683.EntryKeyboardFlags)Element).FlagsToSet;
+			var FlagsToTestFor = ((Issue1683.EntryKeyboardFlags)Element).FlagsToTestFor;
+
+			base.OnElementPropertyChanged(sender, e);
+
+			Control.SetKeyboardFlags(FlagsToSet);
+			Control.TestKeyboardFlags(FlagsToTestFor);
+		}
+	}
+
+#pragma warning disable 618
+	public class EditorRendererKeyboardFlags : EditorRenderer
+#pragma warning restore 618
+	{
+		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			var FlagsToSet = ((Issue1683.EditorKeyboardFlags)Element).FlagsToSet;
+			var FlagsToTestFor = ((Issue1683.EditorKeyboardFlags)Element).FlagsToTestFor;
+			base.OnElementPropertyChanged(sender, e);
+
+			Control.SetKeyboardFlags(FlagsToSet);
+			Control.TestKeyboardFlags(FlagsToTestFor);
+		}
+	}
+
+	public static class KeyboardFlagExtensions
+	{
+		public static void TestKeyboardFlags(this FormsEditText Control, KeyboardFlags? flags)
+		{
+			if (flags == null)
+			{
+				return;
+			}
+			if (flags.Value.HasFlag(KeyboardFlags.CapitalizeSentence))
+			{
+				if (!Control.InputType.HasFlag(InputTypes.TextFlagCapSentences))
+				{
+					throw new Exception("TextFlagCapSentences not correctly set");
+				}
+			}
+			else if (flags.Value.HasFlag(KeyboardFlags.CapitalizeCharacter))
+			{
+				if (!Control.InputType.HasFlag(InputTypes.TextFlagCapCharacters))
+				{
+					throw new Exception("TextFlagCapCharacters not correctly set");
+				}
+			}
+			else if (flags.Value.HasFlag(KeyboardFlags.CapitalizeWord))
+			{
+				if (!Control.InputType.HasFlag(InputTypes.TextFlagCapWords))
+				{
+					throw new Exception("TextFlagCapWords not correctly set");
+				}
+			}
+		}
+
+		public static void SetKeyboardFlags(this FormsEditText Control, KeyboardFlags? flags)
+		{
+			if (flags == null)
+			{
+				return;
+			}
+
+			if (flags.Value.HasFlag(KeyboardFlags.CapitalizeCharacter))
+			{
+				Control.InputType = Control.InputType | InputTypes.TextFlagCapCharacters;
+			}
+
+			if (flags.Value.HasFlag(KeyboardFlags.CapitalizeSentence))
+			{
+				Control.InputType = Control.InputType | InputTypes.TextFlagCapSentences;
+			}
+
+			if (flags.Value.HasFlag(KeyboardFlags.CapitalizeWord))
+			{
+				Control.InputType = Control.InputType | InputTypes.TextFlagCapWords;
+			}
+		}
+	}
+
+
 	//public class HintLabel : Xamarin.Forms.Platform.Android.AppCompat.LabelRenderer
 	//{
 	//	public HintLabel()
@@ -573,7 +664,7 @@ namespace Xamarin.Forms.ControlGallery.Android
 	// }
 
 #pragma warning disable CS0618 // Leaving in old constructor so we can verify it works
-	public class NoFlashTestNavigationPage 
+	public class NoFlashTestNavigationPage
 #if FORMS_APPLICATION_ACTIVITY
 		: Xamarin.Forms.Platform.Android.NavigationRenderer
 #else

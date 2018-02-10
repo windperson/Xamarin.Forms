@@ -31,12 +31,12 @@ namespace Xamarin.Forms.Platform.Android
 			else if (self is CustomKeyboard)
 			{
 				var custom = (CustomKeyboard)self;
-				bool capitalizedSentenceEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeSentence);
-				bool capitalizedWordsEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeWord);
-				bool capitalizedCharacterEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeCharacter);				
+				var capitalizedSentenceEnabled = (custom.Flags & KeyboardFlags.CapitalizeSentence) == KeyboardFlags.CapitalizeSentence;
+				var capitalizedWordsEnabled = (custom.Flags & KeyboardFlags.CapitalizeWord) == KeyboardFlags.CapitalizeWord;
+				var capitalizedCharacterEnabled = (custom.Flags & KeyboardFlags.CapitalizeCharacter) == KeyboardFlags.CapitalizeCharacter;
 
-				bool spellcheckEnabled = custom.Flags.HasFlag(KeyboardFlags.Spellcheck);
-				bool suggestionsEnabled = custom.Flags.HasFlag(KeyboardFlags.Suggestions);
+				var spellcheckEnabled = (custom.Flags & KeyboardFlags.Spellcheck) == KeyboardFlags.Spellcheck;
+				var suggestionsEnabled = (custom.Flags & KeyboardFlags.Suggestions) == KeyboardFlags.Suggestions;
 
 				if (!capitalizedSentenceEnabled && !spellcheckEnabled && !suggestionsEnabled)
 					result = InputTypes.ClassText | InputTypes.TextFlagNoSuggestions;

@@ -45,21 +45,23 @@ namespace Xamarin.Forms.Platform.UWP
 			else
 			{
 				var custom = (CustomKeyboard)self;
-				bool capitalizedSentenceEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeSentence);
-				bool capitalizedWordsEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeWord);
-				bool capitalizedCharacterEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeCharacter);
-				bool spellcheckEnabled = custom.Flags.HasFlag(KeyboardFlags.Spellcheck);
-				bool suggestionsEnabled = custom.Flags.HasFlag(KeyboardFlags.Suggestions);
+				var capitalizedSentenceEnabled = (custom.Flags & KeyboardFlags.CapitalizeSentence) == KeyboardFlags.CapitalizeSentence;
+				var capitalizedWordsEnabled = (custom.Flags & KeyboardFlags.CapitalizeWord) == KeyboardFlags.CapitalizeWord;
+				var capitalizedCharacterEnabled = (custom.Flags & KeyboardFlags.CapitalizeCharacter) == KeyboardFlags.CapitalizeCharacter;
+
+				var spellcheckEnabled = (custom.Flags & KeyboardFlags.Spellcheck) == KeyboardFlags.Spellcheck;
+				var suggestionsEnabled = (custom.Flags & KeyboardFlags.Suggestions) == KeyboardFlags.Suggestions;
+
 				InputScopeNameValue nameValue = InputScopeNameValue.Default;
-				
-				if(capitalizedSentenceEnabled)
+
+				if (capitalizedSentenceEnabled)
 				{
 					if (!spellcheckEnabled)
 					{
 						Log.Warning(null, "CapitalizeSentence only works when spell check is enabled");
 					}
 				}
-				else if(capitalizedWordsEnabled)
+				else if (capitalizedWordsEnabled)
 				{
 					if (!spellcheckEnabled)
 					{

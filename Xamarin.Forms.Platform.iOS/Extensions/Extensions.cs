@@ -40,13 +40,15 @@ namespace Xamarin.Forms.Platform.iOS
 			else if (keyboard is CustomKeyboard)
 			{
 				var custom = (CustomKeyboard)keyboard;
-				var capitalizedSentenceEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeSentence);
-				var capitalizedWordsEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeWord);
-				var capitalizedCharacterEnabled = custom.Flags.HasFlag(KeyboardFlags.CapitalizeCharacter);
-				var capitalizedNone = custom.Flags.HasFlag(KeyboardFlags.CapitalizeNone);
 
-				var spellcheckEnabled = custom.Flags.HasFlag(KeyboardFlags.Spellcheck);
-				var suggestionsEnabled = custom.Flags.HasFlag(KeyboardFlags.Suggestions);
+				var capitalizedSentenceEnabled = (custom.Flags & KeyboardFlags.CapitalizeSentence) == KeyboardFlags.CapitalizeSentence;
+				var capitalizedWordsEnabled = (custom.Flags & KeyboardFlags.CapitalizeWord) == KeyboardFlags.CapitalizeWord;
+				var capitalizedCharacterEnabled = (custom.Flags & KeyboardFlags.CapitalizeCharacter) == KeyboardFlags.CapitalizeCharacter;
+				var capitalizedNone = (custom.Flags & KeyboardFlags.None) == KeyboardFlags.None;
+
+				var spellcheckEnabled = (custom.Flags & KeyboardFlags.Spellcheck) == KeyboardFlags.Spellcheck;
+				var suggestionsEnabled = (custom.Flags & KeyboardFlags.Suggestions) == KeyboardFlags.Suggestions;
+
 
 				UITextAutocapitalizationType capSettings = UITextAutocapitalizationType.None;
 
