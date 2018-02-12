@@ -58,7 +58,7 @@ namespace Xamarin.Forms.Controls.Issues
 
 			inputViews.Add(new EntryKeyboardFlags() { ClassId = "CustomRenderer" });
 			inputViews.Add(new EntryKeyboardFlags() { ClassId = "CustomRendererCapitalizeSentence", FlagsToSet = KeyboardFlags.CapitalizeSentence, FlagsToTestFor = KeyboardFlags.CapitalizeSentence });
-			inputViews.Add(new EntryKeyboardFlags() { ClassId = "CustomRendererCapitalizeWord", FlagsToSet = KeyboardFlags.CapitalizeWord, FlagsToTestFor = KeyboardFlags.CapitalizeSentence });
+			inputViews.Add(new EntryKeyboardFlags() { ClassId = "CustomRendererCapitalizeWord", FlagsToSet = KeyboardFlags.CapitalizeWord, FlagsToTestFor = KeyboardFlags.CapitalizeWord });
 
 			if (Device.RuntimePlatform != Device.UWP)
 			{
@@ -190,9 +190,9 @@ namespace Xamarin.Forms.Controls.Issues
 		[Test]
 		public void Issue1683Test()
 		{
+			RunningApp.WaitForElement(q => q.Marked("Rotation"));
 			for (int i = 0; i < 6; i++)
 			{
-				RunningApp.WaitForElement("Rotation");
 				RunningApp.Tap(q => q.Marked("Rotation"));
 			}
 		}
