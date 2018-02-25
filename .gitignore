@@ -55,3 +55,7 @@ AndroidNative/.gradle/
 AndroidNative/gradlew
 AndroidNative/gradlew.bat
 !EmbeddingTestBeds/Embedding.iOS/*.designer.cs
+
+# For build debuggable nuget
+.nuspec/*.nupkg
+docs/*.xml
